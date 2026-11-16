@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IELTS Speaking Mock Test</title>
+<style>
+:root{--bg:#faf7f0;--ink:#1d2033;--mute:#6b6f85;--acc:#5b5fc7;--soft:#e8e8fa;--card:#fff;--warn:#c2410c;--ok:#2f855a;--line:#e3dfd3}
+@media(prefers-color-scheme:dark){:root{--bg:#171826;--ink:#ecedf7;--mute:#9a9db5;--acc:#9da1ff;--soft:#26283d;--card:#202236;--warn:#fb923c;--ok:#68d391;--line:#33364f}}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:Georgia,'Times New Roman',serif;line-height:1.5;min-height:100vh}
+.wrap{max-width:760px;margin:0 auto;padding:20px 18px 40px}
+h1{font-size:2.2rem;margin:.3em 0}h2{margin:.2em 0}
+.sub{color:var(--mute);font-family:system-ui,sans-serif}
+button{font:600 1rem system-ui,sans-serif;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:11px 18px;border-radius:10px;cursor:pointer}
+button:hover{border-color:var(--acc)}button:focus-visible{outline:3px solid var(--acc)}
+button.p{background:var(--acc);color:#fff;border-color:var(--acc)}
+button.big{font-size:1.15rem;padding:16px 28px;margin:18px 0}
+.bar{position:sticky;top:0;height:8px;background:var(--soft);z-index:5}
+.bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .4s}
+.meta{display:flex;justify-content:space-between;font-family:system-ui,sans-serif;color:var(--mute);margin:14px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px;margin:12px 0}
+.q{font-size:1.6rem;margin:0}
+.cue ul{margin:.6em 0 0;padding-left:1.2em;font-size:1.15rem}
+.timer{font:700 5rem/1 ui-monospace,Menlo,monospace;text-align:center;margin:18px 0 4px;transition:color .3s}
+.tl{text-align:center;font-family:system-ui,sans-serif;color:var(--mute);margin-bottom:14px}
+.prep .timer{color:var(--acc)}.speak .timer{color:var(--ok)}.low .timer{color:var(--warn);animation:pl 1s infinite}
+@media(prefers-reduced-motion:reduce){.low .timer{animation:none}}
+@keyframes pl{50%{opacity:.55}}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:20px;font-family:system-ui,sans-serif;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.on{opacity:1}
+.sum div{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-family:system-ui,sans-serif}
+.hide{display:none}
+@media(max-width:480px){.timer{font-size:3.8rem}.q{font-size:1.3rem}}
+</style></head><body>
+<div class="bar"><i id="pg"></i></div>
+<div class="wrap">
+<!-- HOME -->
+<section id="home">
+<h1>IELTS Speaking Mock Test</h1>
+<p class="sub">Three parts, about 12 minutes, in exam order. Speak out loud and answer in full. The timer keeps pace; nothing is recorded or scored.</p>
+<div class="card"><p><b>Part 1</b> Interview: 10 questions, 25 seconds each.<br><b>Part 2</b> Long turn: 1 minute to prepare, 2 minutes to speak.<br><b>Part 3</b> Discussion: 5 questions, 35 seconds each.</p></div>
+<button class="p big" id="startBtn">START IELTS MOCK TEST</button>
+</section>
+<!-- TEST -->
+<section id="test" class="hide">
+<div class="meta"><span id="part"></span><span id="qn"></span></div>
+<div class="card" id="qcard"><p class="q" id="qtext"></p></div>
+<div id="tbox"><div class="timer" id="time">0:25</div><div class="tl" id="tl"></div></div>
+<div class="ctl">
+<button id="prev">Previous</button><button class="p" id="toggle">Start</button><button id="next">Next</button><button id="restart">Restart test</button>
+</div>
+<div class="ctl" style="margin-top:8px"><button id="ready" class="hide">I'm ready, start speaking</button></div>
+</section>
+<!-- SUMMARY -->
+<section id="done" class="hide">
+<h1>Test completed</h1>
+<p class="sub">This tool does not hear your speech, so it gives no band score. Ask a teacher, or record yourself and review it against the IELTS descriptors.</p>
+<div class="card sum" id="sum"></div>
+<div class="ctl"><button class="p" id="again">Take another test</button><button id="homeBtn">Return to homepage</button></div>
+</section>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+/* ====== QUESTION BANKS ====== */
+const P1TXT=`
+## Common Topics
+# Work/Studies
+Do you work or are you a student?
+Why did you choose this kind of work/to study this subject?
+Do you like your job?
+What’s the most interesting part of being a worker/student?
+What’s the most difficult part of being a worker/student?
+What do you dislike about your work or studies?
+What kind of work would you like to do in the future?
+# Accommodation
+Do you live in a house or an apartment/flat?
+Can you describe the place where you live?
+What do you like about your flat?
+Which is your favourite room in your home?
+What can you see from the windows?
+Would you change anything about your home?
+Would you like to move to a different home in the future?
+# Hometown/city
+Tell me about your hometown.
+What’s your hometown known for?
+Do you like your hometown?
+How long have you been living there?
+Do you think you’ll continue living there for a long time?
+How has your town changed in the last 20 years?
+# Your Country
+Where is your country located?
+Which part of your country do most people live in?
+What are the main industries in your country?
+What are some of the good things about living in your country?
+What are some of the bad things about living in your country?
+Will you stay in your country in the future?
+## New Topics
+# Paper
+Do you carry paper and pens with you when you go out?
+Do people still keep handwritten letters today?
+Do you still write physical letters?
+What did you like to do with paper as a child?
+Have you made any crafts with paper?
+# Secondary school
+Do you remember your first day at secondary school?
+Is there anything you miss about your secondary school?
+What was your favourite subject at secondary school?
+Were there any subjects that you found difficult at secondary school?
+# Fruit and vegetables
+What kind of fruits and vegetables do you like?
+How often do you eat fruit and vegetables?
+What kind of fruits and vegetables do you dislike?
+Were there any kind of fruits and vegetables you disliked as a child?
+Where do you usually buy fruit and vegetables?
+# Feeling bored
+Do you often feel bored?
+When would you feel bored?
+What do you do when you feel bored?
+Do you think childhood or adulthood is boring?
+# Politeness
+Are you polite?
+Have people become less or more polite over time?
+Do you think being polite is very important?
+How did you learn to be polite as a child?
+Who taught you to be polite?
+Do you think people should be polite?
+# Tiredness
+Do you often feel tired?
+What do you do when you feel tired?
+When would you feel tired?
+Do you think you get enough rest?
+# Rubbish and recycling
+How do you usually deal with your household garbage?
+How do you recycle things like paper and plastic?
+Do you sort your garbage before throwing it away?
+What do you do when you see rubbish on the street?
+Did you learn about recycling when you were a child?
+# Emails
+Do you often send emails?
+Is sending emails widespread in your country?
+Do you think emails will be more or less common in the future?
+How often do you write emails or cards?
+Do you prefer texting or emails?
+# Computers/tablets
+Do you like using a computer or tablet?
+When would you use a computer or tablet?
+When was the first time you used a computer or tablet?
+What would your life be like without computers or tablets?
+When would it be difficult for you to use a computer or tablet?
+# Collecting things
+Do you collect things?
+Are there any things you have kept from your childhood?
+Where do you usually keep things you need?
+Would you keep old things for a long time? Why?
+# Lost and found
+Have you ever lost things?
+Have you ever lost your keys?
+Will you post on social media if you lose your item?
+What will you do if you find something lost by others?
+Will you report it to the police?
+# Getting lost
+Have you ever lost your way?
+How can you find your way when you are lost?
+Can you read a map when you get lost?
+Have you ever helped someone who got lost?
+# Street market
+Are there many street markets in your country?
+When was the last time you went to a street market?
+Do you prefer shopping in the shopping mall or at the street market?
+What do you usually buy at the street market?
+# Travelling
+Do you like travelling long distance?
+Did you have a long journey with your family as a child?
+Would you like to travel long distance more often in the future?
+Do you prefer to sit by the window when travelling?
+# Advertisements
+Do you like advertisements?
+What kind of advertising do you like?
+Do you often see advertisements when you are on your phone or computer?
+Do you see a lot of advertising on trains or other transport?
+Is there an advertisement that made an impression on you when you were a child?
+Have you ever bought something because of its advertisements?
+Do you watch advertisements from beginning to end?
+# Shoes
+Do you like buying shoes? How often?
+Have you ever bought shoes online?
+Which do you prefer, fashionable or comfortable shoes?
+How much money do you usually spend on shoes?
+# Names
+Do you often forget people's names?
+Is it easy for you to remember people's names?
+How do you remember people's names?
+How do you feel when people can't remember your name?
+Do you think it is important to remember people's names?
+What would you do if someone cannot remember your name?
+# Teachers
+Do you have a favorite teacher?
+Do you remember your teachers from primary school?
+Do you want to be a teacher in the future?
+What kind of teacher do you prefer?
+## Remaining Topics
+# Watches
+Do you wear a watch?
+Have you ever got a watch as a gift?
+Do you think it is important to wear a watch? Why?
+Why do some people wear expensive watches?
+# Tidiness
+Are you a tidy person?
+How do you keep things tidy?
+How important is it for you to keep your room or workspace clean?
+Did you use to keep your room tidy as a child?
+Did your parents teach you to be tidy when you were a child?
+How do you feel when you are in a messy environment?
+Do you think people should be tidy all the time?
+# History
+Do you like history?
+Have you ever been to historical museums?
+Did you like history when you were young?
+When was the last time you read about history?
+# Evening time
+Do you like evenings?
+What do you usually do in the evening?
+What do you dislike doing in the evening?
+What did you do in the evening when you were a child?
+Are there any differences between what you do in the evening now and what you did in the past?
+Do you spend your evenings doing the same things on both weekends and weekdays? Why?
+# Sports programs
+Do you like to watch live sports games?
+Do you like watching sports programs on TV?
+Have you ever watched a sports game in a stadium?
+Who do you like to watch sports games with?
+What kinds of games will you watch in the future?
+# Films
+What films do you like?
+How often do you watch films?
+Do you prefer to watch films at home or in the cinema?
+Do you often go to the cinema with your friends?
+Did you ever go to the cinema alone as a child?
+# Old buildings
+Have you ever seen old buildings in the city?
+Do you prefer living in an old building or a modern house?
+Are there any old buildings you want to see in the future? Why?
+Do you think we should preserve old buildings in cities?
+# Life stages
+Are you currently enjoying your stage of life?
+During which stage of your life were you the happiest?
+What are your plans for the next stage of your life?
+Which stage of your life do you consider the most important?
+# Parks
+Do you like going to parks now?
+Did you like going to parks as a child?
+What do you like to do when visiting a park?
+Are there many public parks or gardens in your country?
+Would you prefer to play in a private or public garden?
+Are there any parks you want to go to in the future?
+Would you like to see more parks in your city?
+How are the parks today different from those you visited as a kid?
+# Mirrors
+Do you like looking at yourself in the mirror? How often?
+Do you usually take a mirror with you?
+Would you use mirrors to decorate your room?
+Have you ever bought mirrors?
+# Cars
+What types of cars do you like?
+Do you prefer to be a driver or a passenger?
+Did you enjoy traveling by car when you were a kid?
+Do you think car colours are important?
+What do you usually do when there is a traffic jam?
+# Websites
+What is your favourite website?
+What kinds of websites do you often visit?
+Have the websites you often visit changed over the years?
+What kinds of websites are popular in your country?
+# Shopping
+Do you like shopping?
+How often do you go shopping?
+Do you compare prices when you shop?
+Is it difficult for you to make choices when you shop?
+Have you ever returned anything you bought online?
+Do you prefer online shopping or in-store shopping?
+# Music
+What kind of music do you listen to?
+Does happy music make you feel more excited?
+Do you prefer sad or happy music?
+Did you have music lessons at school?
+Is it easy to learn music?
+# Teachers
+Do you have a favorite teacher?
+Do you want to be a teacher in the future?
+Do you have a teacher from your past that you still remember?
+Are you still in touch with your primary school teachers?
+In what way has your favourite teacher helped you?
+# Social Media
+What do you do on social media?
+Do you think you spend too much time on social media?
+When did you start using social media?
+Have you posted anything recently?
+# Clothes
+What kind of clothes do you like to wear?
+Do you spend a lot of time choosing clothes?
+Do you like wearing T-shirts?
+Do you prefer to wear comfortable and casual clothes or smart clothes?
+# Dreams/Ambitions
+Are you ambitious?
+What was your childhood dream?
+What is your dream job?
+Are you the kind of person who sticks to dreams?
+# Stars
+Do you want to know more about the outer space?
+Have you ever learnt about outer space and stars?
+Do you want to go into outer space in the future?
+Do you like science fiction movies? Why?
+# Singing
+Do you like singing? Why?
+Have you ever learnt how to sing?
+Do you think singing can bring happiness to people?
+Who do you want to sing for?
+# Science
+Do you like science?
+Which science subject is interesting to you?
+What kinds of interesting things have you done with science?
+When did you learn about science?
+Do you like watching science TV programs?
+Do you go to science museums?
+# Headphones
+Do you use headphones?
+When would you use headphones?
+What type of headphones do you use?
+In what situations would you not use headphones?
+# Jokes
+Are you good at telling jokes?
+Have you ever watched a live comedy show?
+Do you like to watch comedies?
+Do your friends like to tell jokes?
+# Childhood Activities
+What were your favourite activities when you were a child?
+Are there any differences between the activities you liked when you were a child and those you like now?
+Did you prefer to do activities alone or with a group of people when you were a child?
+# Views
+Do you prefer views in urban areas or rural areas?
+Do you like taking pictures of different views?
+Have you seen an unforgettable and beautiful view or scenery?
+Do you prefer views in your own country or in other countries?
+`;
+/* Part 2 cards: c=cue, b=bullets, q=own Part 3 questions, t=related Part 3 theme */
+const card=(c,b,q,t)=>({c,b,q,t});
+const P2=[
+ {t:"success",c:"Describe a very happy person you know.",b:["who this person is","how you know this person","what makes this person happy","and explain why you think this person is so happy."]},
+ {t:"business",c:"Describe a successful business owner you know or have heard about.",b:["who this person is","what kind of business they run","how they became successful","and explain why you admire them."]},
+ {t:"business",c:"Describe a shop or small business you like to visit.",b:["where it is","what it sells","how often you go there","and explain why you like it."]},
+ {t:"education",c:"Describe a teacher who influenced you.",b:["who the teacher was","what they taught","how they taught","and explain why they influenced you."]},
+ {t:"education",c:"Describe a skill you learned that was not taught at school.",b:["what the skill is","how you learned it","who helped you","and explain why it is useful."]},
+ {t:"work",c:"Describe a job you would like to do in the future.",b:["what the job is","what you would do","what qualifications you would need","and explain why you would like it."]},
+ {t:"work",c:"Describe a time you worked in a team.",b:["what the team did","who was in it","what your role was","and explain how you felt about the experience."]},
+ {t:"success",c:"Describe a goal you achieved that you are proud of.",b:["what the goal was","when you set it","how you achieved it","and explain why you are proud of it."]},
+ {t:"money",c:"Describe something expensive you bought that you were happy with.",b:["what it was","when you bought it","why it was expensive","and explain why you were happy with it."]},
+ {t:"money",c:"Describe a time you saved money for something.",b:["what you saved for","how long it took","how you saved","and explain how you felt when you got it."]},
+ {t:"technology",c:"Describe a piece of technology you find useful.",b:["what it is","when you started using it","how you use it","and explain why it is useful."]},
+ {t:"technology",c:"Describe a website or app you use often.",b:["what it is","how you found it","what you use it for","and explain why you like it."]},
+ {t:"travel",c:"Describe a memorable journey you have taken.",b:["where you went","who you went with","what happened","and explain why it was memorable."]},
+ {t:"travel",c:"Describe a place you would like to visit in the future.",b:["where it is","how you would get there","what you would do","and explain why you want to go."]},
+ {t:"development",c:"Describe a habit you would like to change or improve.",b:["what the habit is","how long you have had it","what you have tried","and explain why you want to change it."]},
+ {t:"development",c:"Describe something you did to improve your English.",b:["what you did","when you did it","how it helped","and explain whether you would recommend it."]},
+ {t:"people",c:"Describe a person who inspired you to do something.",b:["who the person is","what they did","what you did as a result","and explain why they inspired you."]},
+ {t:"people",c:"Describe a famous person you admire.",b:["who the person is","what they are known for","how you learned about them","and explain why you admire them."]},
+ card("Describe a house or apartment you would like to live in.",["where it is / where it would be","what you would (like to) do there","who you would (like to) live there with","and explain why you would like to live in this place."],["Do you think it’s better to rent or to buy a place to live in?","How easy is it to find a place to live in your country?","Do you agree that there is a right age for young adults to stop living with their parents?","What options are available to young couples looking for accommodation in your country?","What are some of the pleasures involved in making a home for ourselves?"]),
+ card("Describe an interesting animal you have seen.",["what animal it was","when and where you saw it","and explain how you feel about this animal."],["What kind of animals do people have in their homes?","A lot of animals are getting extinct these days. What do you think about this? Why is it happening?","Earlier people used animals for their work. Now, what do people use to do their work?","Researches are being conducted on animals, is this a good idea?"]),
+ card("Describe a successful small business that you know about.",["what business/company it is","what this business does","how you know about this business","and explain why you think this business/company is successful."],["What qualities are required to become a company leader (or CEO or manager)?","In general, what factors do you think determine whether a small company will become successful or not?","Do you think the latest technology plays an important role in a company’s development?","What do you think of charitable organizations?","Which do you think is better, to start your own business or to work for someone else?"],"business"),
+ card("Describe a crowded place you’ve been to.",["when you went there","where the place is (or was)","who you went there with","and explain how you felt about the place."],["Why do a lot of people enjoy going to crowded places?","Where (or what) would you say is the most crowded place in your city?","Would you say it’s important for a city to have amusement (and/or recreational) facilities?","Why do you think people choose to live in big cities (despite certain problems)?","How do you think cities overseas are different from those in your country?","Would you say urban planning is important?"]),
+ card("Describe a family member you spend a lot of time with.",["who this person is","what you usually do together","what kind of person he/she is","and explain why you spend the most time with him/her."],["What are the advantages of strong family relationships?","How many generations are usually living under one roof in your country?","What are the benefits, and drawbacks of a family of several generations living together?","Do both parents have equal responsibilities in taking care of their children?"],"family"),
+ card("Describe a person who is often in the news, and who you would like to meet.",["who this person is","how you know him/her","why he/she is often in the news","and explain why you would like to meet him/her."],["What is the difference between new media and old media?","Do you think the contents in the newspapers are reliable?","Do you think it’s necessary for people to watch foreign news?","How has social media changed how we consume news?","What kinds of (famous) people are usually in the news in your country?"],"news"),
+ card("Describe a change that could improve your local area.",["what the change would be","how this change could be made","what problems are causing the need for this change","and explain how this change would improve your local area."],["Why do old people not like changes?","Do you think it’s important for people to socialize with their neighbours?","How do people socialize with their neighbors?"]),
+ card("Describe a performance you enjoyed watching.",["what the performance was","when and where you watched the performance","who was performing","and explain why you enjoyed the performance."],["Do you think traditional performances are important?","What do you think is the difference between watching a live performance and watching it on TV?","How do you think watching a dance performance or a stage play influences children?"],"music"),
+ card("Describe an important text message you received.",["who sent the message","what was in the message","why the person sent the message","and explain why the message was important to you."],["Why do some people dislike using text messages?","Have the ways that people communicate with each other changed much in the last few decades?","Why do people prefer texting as compared to phone calls?","Do you think modern technology has any negative influence on communication?","What do you think are some of the main differences between written communication and spoken communication?"],"technology"),
+ card("Describe a uniform you have worn (such as a school or company uniform).",["what it looked like","when and where you needed to wear this uniform","who paid for this uniform","and explain how you felt about that uniform."],["What would you say are the advantages and disadvantages of wearing a uniform?","In your country, do schools provide similar uniforms to their students?","What kinds of professionals need to wear uniforms?","Do you think people wear clothes that reflect their personality?","Do you think women’s clothes show more variety than men’s clothes?"],"fashion"),
+ card("Describe a time when someone apologized to you.",["when this happened","what you were doing","who apologized to you","and explain why they apologized to you."],["What kinds of people are most likely to say sorry?","In what situations do you think people need to (or should) apologize?","What do you think of those people who don’t apologize very often?"]),
+ card("Describe an article you read in a magazine or on the Internet that could help people improve their health.",["when you read it","where you read it","what it was about","and explain why you think it could improve people’s health."],["How do you think people could become healthier?","Are there any differences between the way old people and young people try to stay healthy?","Do schools in your country have any special activities to enhance the fitness of students?","Do you think people in the future will be doing more exercise and eat healthier than they are today?"],"health"),
+ card("Describe a trip you took by public transport.",["when it happened","what means of transport you took","what you did during the trip","and explain how you felt about the trip."],["Do you think traffic jams would be reduced if people could travel on public transport for free?","Why do you think more and more people prefer to travel by plane?","What kinds of obstacles do you think some local governments have to face when they develop transportation infrastructure?"],"travel"),
+ card("Describe a challenging thing you have done.",["when you did it","why you did it","how you handled this challenge","and explain why you thought it was challenging."],["What challenges do young people face today?","How do young people handle difficult or challenging tasks?","Which do you think is better, to face these difficulties and challenges alone or to seek the help of others?","Do you think people need to be challenged?"],"development"),
+ card("Describe a person who taught you something important.",["who this person was","what they taught you","how they taught it to you","and explain why you think what they taught is important."],["In what ways can we encourage others to accept new ideas and things (accept innovation)?","Can you suggest how we could make children more interested in learning?","Who would you say is more important to the education of a child, the parents or teachers?"],"education"),
+ card("Describe a member of a team that you know about.",["what team it is","what role in the team this person plays","and explain why you like him/her."],["In a team, is it more important to pursue individual development or to achieve team targets?","Do you think it’s important for children to join teams to learn to cooperate with others?","Do you think disagreements among team members have a great influence on the teamwork?","Can you suggest how teamwork could be cultivated in classes at school?"],"work"),
+ card("Describe a job you would not like to do.",["what the job is","how you know about it","whether it is an easy or difficult job","and explain why you would not like to do it."],["How do you think AI (artificial intelligence) will affect people’s work?","What would you say are the important factors to consider when choosing a career?","That technology will make some people lose their jobs. How do you think this problem should be handled?","Would you ever move to work and live in another city?","Is it common in your country for people to move to other cities because of work?","When young people choose their jobs, which do you think is usually more important, the salary or their interest in the work?"],"work"),
+ card("Describe something exciting that you did.",["when you did it","where you were when you did it","who you did it with","and explain why it was exciting for you."],["Do people in your country spend a lot of money on celebrating birthdays?","Do you think it’s necessary to spend a lot of money on holding a party?","Do people in your country usually go out to celebrate traditional festivals with others?"],"freetime"),
+ card("Describe a time when you couldn’t use your mobile phone.",["where it was","what you were doing at this time","when it was","and explain why you were not able to use your mobile phone."],["Do you think there should be regulations on the use of mobile phones?","What do you think of primary school students owning a mobile phone?","What (minimum) age do you think is appropriate for owning a cell phone?"],"technology"),
+ card("Describe a time when the weather prevented you from doing something.",["what your plan was","what weather you were hoping for","what happened","and explain how you felt when you had to change your plans."],["Do people in your country enjoy talking about the weather, as small talk, when they meet each other?","What types of weather do people in your country prefer, cold or hot weather?","What kinds of people care most about the weather?","Would you say weather forecasts are usually accurate?"],"environment"),
+ card("Describe something you bought that was difficult to use at first.",["what it was","why you bought it","how you use it","and explain why it was difficult to use at first."],[],"technology"),
+ card("Describe a time you watched a famous person being interviewed.",["who the person was","where you watched the interview","what they talked about","and explain what you thought about the interview."],["Why do people like watching interviews with famous people?","Should famous people be asked about their private lives?","How have interviews changed with social media and podcasts?","What makes a good interviewer?","Do celebrities have a duty to answer difficult questions?"],"people"),
+ card("Describe a person who learns history and loves history.",["who this person is","how you know this person","what periods or events they are interested in","and explain why you think they love history."],["Why do some people find history interesting while others don’t?","Is it important for children to learn history at school?","How can museums make history more engaging?","Can we really learn lessons from the past?","Is history written differently in different countries?"],"education"),
+ card("Describe somewhere near a natural place that you have been to.",["where it is","how you got there","what you saw or did there","and explain how you felt about it."],["Why do people enjoy visiting natural places?","Should entry to national parks be free?","How can tourists avoid damaging nature?"],"environment"),
+ card("Describe someone who is older than you that you admire.",["who this person is","how you know them","what they have achieved","and explain why you admire them."],["What can young people learn from older people?","Do you think young people respect older people enough?","Why are older people often seen as wise?","Is the generation gap getting bigger?"],"oldpeople"),
+ card("Describe a person you know who did something difficult and was successful.",["who this person is","what they did","why it was difficult","and explain how they succeeded."],["What qualities help people succeed when things are difficult?","Is it better to give up a hard goal or keep trying?","Do people learn more from success or from failure?","Who should help people achieve difficult goals, family or teachers?","Why do some people give up easily?"],"success"),
+ card("Describe a time when you changed an important decision of yours.",["what the decision was","why you first made it","why you changed it","and explain how you felt afterwards."],["Is it a good idea to change your mind?","Should people take advice from others when making decisions?","Do people make better decisions when they are older?"],"development"),
+ card("Describe a happy person you know.",["who this person is","how you know them","what they do in daily life","and explain why you think they are happy."],["What do you think makes people happy?","Is money important for happiness?","Are people today happier than in the past?","Can happiness be taught?","Why are some people always positive?"],"success"),
+ card("Describe a time when you saved money to buy something special.",["what you bought","how long you saved","how you saved the money","and explain why it was special to you."],["Do young people in your country save money?","Should children be given pocket money?","Why do some people spend more than they earn?","Is it better to save or to invest?"],"money"),
+ card("Describe a TV show or online program you have watched recently.",["what it was","where you watched it","what it was about","and explain why you liked or disliked it."],["Why are TV series so popular today?","How has streaming changed the way people watch television?","Should children’s viewing be controlled by parents?"],"films"),
+ card("Describe a home that you like to visit but do not want to live in.",["whose home it is","where it is","what it is like","and explain why you wouldn’t want to live there."],["What makes a house feel like a home?","Do people care more about the size or the location of a home?","How have homes changed in your country?","Why do some people prefer to live alone?"],"family"),
+ card("Describe a story or book with animals in it.",["what the story or book was","who the animals were","what happened","and explain why you remember it."],["Why do children enjoy stories about animals?","Do stories teach children useful lessons?","Are books about animals popular in your country?","Will printed children’s books disappear?"],"books"),
+ card("Describe a food that people eat on special occasions.",["what the food is","when people eat it","how it is prepared","and explain why it is eaten on that occasion."],["Why do festivals often involve special food?","Are traditional dishes disappearing in your country?","Do people eat together as much as before?"],"food"),
+ card("Describe a person who is good at learning and speaking new languages.",["who this person is","what languages they speak","how they learned them","and explain why you think they are good at it."],["Why are some people better at languages than others?","What is the best age to start learning a language?","Will translation apps make learning languages unnecessary?","Should schools teach more than one foreign language?"],"language"),
+ card("Describe a tall building you like or dislike.",["where it is","what it looks like","what it is used for","and explain why you like or dislike it."],["Why do cities build tall buildings?","What are the disadvantages of living in high-rise flats?","Should old buildings be replaced with modern ones?","How might city skylines change in the future?"],"countryside"),
+ card("Describe an interesting video.",["what the video was about","where you watched it","why you watched it","and explain why you found it interesting."],["Why do people enjoy watching short videos?","Do videos teach people better than books?","Should video platforms limit what children can watch?","Why do some videos become popular quickly?"],"technology"),
+ card("Describe a boring place.",["where it is","when you went there","what you did there","and explain why it was boring."],["Why do some people get bored easily?","How can cities make public places more interesting?","Do children get bored more than adults?","What do people do to avoid boredom?"],"freetime"),
+ card("Describe your favorite city that you have visited.",["which city it was","when you went there","what you did there","and explain why it is your favorite."],["What attracts tourists to a city?","Do you prefer visiting cities or natural areas?","How can cities cope with large numbers of tourists?","Do cities around the world look more and more alike?"],"travel"),
+ card("Describe a time when you got up early.",["when it was","why you got up early","what you did","and explain how you felt that day."],["Are people in your country early risers?","Is it healthy to get up very early?","Do schools and offices start too early?","Do you think morning people are more successful?"],"time"),
+ card("Describe a person who loves to grow plants at home or in the garden.",["who this person is","what they grow","how they look after the plants","and explain why they enjoy it."],["Why are gardens important for people living in cities?","Is gardening becoming more or less popular?","Can growing plants help people relax?","Should schools teach children to grow food?"],"environment"),
+ card("Describe a new law you would like to introduce in your country.",["what the law is","who it would affect","how it would be enforced","and explain why you would like to introduce it."],["Do people generally obey laws in your country?","Should the government control what people eat or drink?","Who should make the laws, politicians or the public?","What happens when a law is unpopular?"],"law"),
+ card("Describe a person who works in a successful company.",["who this person is","what the company does","what role they have","and explain why you think the company is successful."],["What makes a company successful?","Is it better to work for a large or a small company?","Do companies have a responsibility to the community?"],"business"),
+ card("Describe a time when you worked in a group.",["what the task was","who was in the group","what you did","and explain how well the group worked together."],["Why do schools ask students to work in groups?","What problems can arise in group work?","Is teamwork more important now than in the past?","Do you think leaders are necessary in a group?","Do some people work better alone?"],"work"),
+ card("Describe your perfect job.",["what the job is","what you would do","what skills you would need","and explain why it would be perfect for you."],["What makes a job perfect for most people?","Is it more important to enjoy a job or to earn a lot?","Will future jobs be different from today’s jobs?","Should schools help students choose careers?"],"work"),
+ card("Describe a friend from your childhood.",["who this person is","how you met","what you did together","and explain why you are still, or are no longer, friends."],["Why do some childhood friendships last and others don’t?","How is making friends different for children and adults?","Do people have fewer close friends nowadays?","Is it easier to keep in touch with friends today?"],"friends"),
+ card("Describe a way or change that helps you save a lot of time.",["what it is","how you started doing it","how it helps","and explain why it saves you time."],["Why do people feel they have no free time?","Does technology really save time?","Should schools teach time management?","Are people in your country usually in a hurry?"],"time"),
+ card("Describe a time when you helped someone.",["who you helped","how you helped","why they needed help","and explain how you felt afterwards."],["Why do some people help strangers?","Should people be paid for volunteering?","Are people more or less willing to help each other than before?","What should schools do to teach children to help others?"],"politeness"),
+ card("Describe a long-term goal you would like to achieve.",["what the goal is","how long it may take","what you will do to achieve it","and explain why it is important to you."],["Is it better to have long-term or short-term goals?","Why do some people find it hard to reach their goals?","Should young people set career goals early?","Does having goals make people more successful?"],"development"),
+ card("Describe someone you studied with who is successful in his or her life.",["who this person is","what you studied together","what they do now","and explain why you think they are successful."],["Do good students always become successful?","What is more important for success, qualifications or personality?","How do schools prepare students for working life?","Does success mean the same to everyone?"],"success")
+
+];
+const P3TXT=`
+# family
+In a typical family, who plays the leading role?
+In your country, what kinds of family members usually live together?
+Do young and middle-age people live with old people?
+Is the nanny and/or the day-care center the third parent?
+Where is the best place to raise a family?
+# education
+Should schools teach both arts and science?
+What kinds of courses are useful for university students?
+Why do some students dislike studying at school?
+What school activities are good for school children?
+Are there good colleges in your country?
+Are college tuition reasonable in your country?
+Do many people in your country study abroad?
+Are women encouraged to pursue education?
+Do you think teachers are paid enough?
+Do you think your country should spend more money on schools?
+Do you think it is easier to learn as a child or as an adult?
+Does education guarantee a good job?
+Is it difficult for people without a college education to get good jobs where you live?
+What are the qualities of a good teacher?
+What are the qualities of a good student?
+Does your country provide a good public school system?
+What improvements does the school system need?
+Can computers help us with math?
+What methods can be applied to make math class more interesting?
+How do schools teach math in your country?
+What are the advantages and disadvantages of using a calculator?
+Do you think students should be able to choose the subjects they like?
+What subject would be added to high school?
+Which is the most useful subject?
+Can the students in your country choose their favourite subjects?
+# health
+Do women pay more attention to their health than men?
+Could governments do more to promote healthier lifestyle options?
+Do you think most people worry more about their health as they get older?
+What do old people in your country do to keep fit?
+What else can people do to keep fit besides sports?
+Do you think that the tobacco companies should be held reasonably responsible for a person’s addiction to nicotine?
+Should smoking in restaurants be banned?
+What are some things people can do to keep healthy?
+What foods do you think are unhealthy?
+Do you think traditional medicine is a good alternative to modern medicine?
+What are the advantages or disadvantages of modern medicine?
+What are the advantages or disadvantages of traditional medicine?
+Is it possible to maintain a healthy lifestyle in this modern world?
+Why do many people try to have a healthy lifestyle?
+What are the most efficient ways to lose weight?
+Is physical activity (jogging, going to a gym, swimming pool) an important part of a healthy lifestyle?
+# food
+Describe what you think is a healthy diet.
+Are there many vegetarians in your country?
+Why do you think some people choose to be vegetarians?
+Is the food that people eat today in your country different from the food that people used to eat in the past?
+How do you think the way we eat will change in the future?
+Is American-style ‘fast food’ popular in your country? Why? Popular with whom?
+What do you think of this popularity? Is it a good thing?
+More and more people are overweight nowadays. What do you think might be the cause of this?
+What does a typical meal consist of in your country?
+Do you think a vegetarian diet is better than a diet that includes meat?
+Do you think that food defines a culture? If so, how?
+Do you think fast food, soda and sweets should be sold in school cafeterias?
+How many meals a day should people eat?
+# travel
+Do you think modern life gives people enough time for leisure?
+What’s the most important factor for a tourist attraction?
+Do you think we should have more public holidays?
+What do people need before traveling to another country?
+Is there any difference between young tourists and adult tourists?
+Do you think tourism will harm the earth?
+Which method of travel do you consider the safest?
+How easy is it to travel around your country?
+Has travel become safer in recent years?
+What are the pros and cons of low-cost air travel?
+How do you think people will travel in the future?
+How do you think traveling today is different from what it was several decades ago?
+In 20 or 30 years, how do you think traveling will be different compared to how it is today?
+# money
+Why do young people tend to waste money?
+What kinds of things do people like to buy in your country?
+How do people become rich?
+Why do people often want more money, no matter how much they have got?
+What are some reasons for people being poor? Can poverty be avoided?
+Why are poor people in many cases more generous than rich people?
+Do you think that riches can have a bad effect on a person? How?
+Do you think taxes in your country are too high/low?
+If you were the ruler of your country, what would you do to change the taxation system?
+Should parents give a credit card to teenagers?
+How do you think the government uses all the taxes they collect?
+Can a person be rich without having a lot of money or possessions? How?
+# people
+Should actors be paid more?
+What influences do actors or actresses have on young people?
+Are there many people in your country who want to work as an actor?
+Who is more popular, TV stars or movie stars?
+Are famous people always happy?
+What makes a person famous?
+To be famous, do you think a person needs to have some special talent (or ability)?
+How do people invade the privacy of famous people?
+What are some general qualities of famous people? Do they have any qualities that are different from ordinary people?
+Compare how people become celebrities today with how people became celebrities years ago, for example, 30 or 50 years ago.
+In your opinion, were the standards for judging who is famous before better than they are now?
+# films
+Is drama series popular in your country? Why?
+What is the difference between young people and old people’s favourite TV drama? Why?
+Do you think people will change their preference for TV drama when getting older?
+What is the influence of foreign shows on people in your country?
+Should films and television be censored or should we be free to choose what we see?
+Do you think the cinema has increased or decreased in popularity in recent years?
+What common courtesies apply when watching a movie at the theatre?
+Should children under the age of 10 be allowed to see horror movies?
+Do you think there should be more movies made in your country?
+What are the advantages and disadvantages of making films of real-life events?
+How important do you think it is for a filmmaker to remain true to the original story?
+# advertising
+How do advertisements attract attention?
+Do young and old people show the same attitude towards advertisements?
+Are advertisements a good or bad influence on children?
+Do advertisements actually influence people to buy things? How?
+What are the harmful and beneficial effects of advertising?
+Do you think advertising should be allowed to interrupt TV or radio programs? What are the alternatives?
+What are the different methods of advertising?
+What is the most popular way of advertising?
+Do you think that ads create a desire for more and more material possessions?
+# work
+Is salary important to you? What is the impact of salary on doing work?
+What kinds of jobs are easy to get in, in a foreign country?
+Should young adults work abroad?
+Is it hard to find an interesting job in your country?
+What kinds of preparation should people do for a job interview?
+Why do some people keep changing their jobs?
+What should a good employer do?
+How would you define ‘an interesting job’?
+What are the disadvantages of working overtime?
+# friends
+Why do some people lose contact with their childhood friends?
+How do people in your country make friends these days?
+Why is it hard to maintain friendships?
+Why is it easier to make friends on the internet than in reality?
+What qualities do you think are important in a friend?
+Do you think it is a good idea to borrow money from a friend? Why or why not?
+What factors may result in the breakdown of a good friendship?
+Friendship is the most important relationship. Do you agree? Why? Why not?
+# photography
+How to become a professional photographer?
+Do you need a professional photographer for important events?
+What kinds of devices do people like to use for taking photos these days?
+Why do some people like to keep photos?
+Has the way people take photos changed?
+What are the pros and cons of digital photography?
+Can pictures be posted on the internet without permission?
+When does taking pictures become an invasion of privacy?
+Is it easy to take good photographs?
+Should people share their photographs online?
+Is a photograph a reliable form of identification?
+# technology
+Which social networking platform do people in your country usually use?
+What are some good aspects of social networking?
+What are some bad aspects of social networking?
+What type of information should you put on social networking sites?
+For children, at what age do you think it becomes suitable for them to use cell phones?
+Is it common for children to use cellphones in your country?
+What do teenagers in your country use cellphones for?
+What are the advantages/disadvantages of using a cellphone?
+Why are so many people addicted to social apps?
+What are some of the different reasons why people use the Internet?
+Some people say that different age groups have different tastes on Internet contents. What do you think?
+What influences can the Internet have on children/teenagers?
+Do you think parents should control what Internet sites their children visit?
+What (kinds of) people don’t use the internet?
+What are the disadvantages people suffer because they do not use the Internet?
+Do you think our lives have been improved by the Internet?
+Do men and women use the internet for different purposes?
+What is the best thing about the Internet?
+What problems does the Internet create? What problems does it solve?
+Do you think governments have the right to censor the Internet?
+Do you think that it is important for schools to have Internet access? Why?
+Do you think that the Internet is safe for children? Why?
+# news
+What kind of magazines are popular?
+Is being a journalist an interesting job?
+Why do some journalists go to the battlefield to report the war?
+Why do some people still read paper magazines?
+Do you think it’s important to keep up with the news?
+What are the main differences between magazines and newspapers?
+Why do some people only read the headlines when they read a newspaper?
+What is the role of newspapers in society?
+Why do we buy newspapers?
+Do you think that news is censored in some countries?
+Will newspapers disappear in the future?
+What would the world be like without news?
+How has it changed over the years?
+Do you think people need to know all of the news?
+Do you think it’s important to read the newspaper and know what is going on in the world? Why or why not?
+# law
+Do you think that people obey the law all the time?
+Do people like being a policeman in your country?
+What qualities should a police officer have?
+Why do some people prefer to be a lawyer over being a policeman?
+# music
+Why do you think that some local singers or musicians aren’t as successful as some from other countries?
+Do you think the Internet has affected the music industry? In what ways?
+Do you think there will be further changes in the music industry in the future?
+Do you think the music young people listen to in your country is becoming more globalized? Why/Why not?
+# fashion
+What kinds of clothes do people wear after work?
+Do you think it is necessary for children to wear school uniforms?
+Where do people in your country buy clothes?
+When do people wear formal clothes?
+Will the way we dress influence the way we behave?
+Do people wear formal clothes more often or less often than in the past?
+Why do some people care about following fashion trends?
+When is it important to dress formally?
+How different are the clothes you wear now from those you wore 10 years ago?
+Do you think dress codes should be adhered to if requested on an invitation?
+What items of clothing do people not wear anymore?
+What do you think the clothes we wear say about us?
+Is it possible to look good without spending lots of money on clothes?
+Do you think fashion trends change constantly?
+Do you think people behave differently in different kinds of clothes?
+Are people’s ideas about fashion today the same as people’s ideas in previous years?
+# environment
+What do you think is the main danger the world faces in terms of the environment?
+What examples are there of people damaging the natural world?
+Are there litter laws in your country?
+What is the penalty for littering in your country?
+Are there any lessons to learn from nature?
+Do you think cars should be banned from city centres?
+Do you think people should recycle newspapers? Why or why not?
+What are some things that can be recycled?
+What are some things that your community is doing to help the environment?
+What are some types of pollution?
+What can large cities do to improve their air quality?
+What is the most important issue facing the environment today?
+Whom do you think is more responsible for pollution, individual people or the government? Explain.
+Do you know about any anti-pollution programs in your community?
+Are companies more or less environmentally responsible now than they were in the past?
+What types of energy are popular in your native country?
+What are some ways energy is wasted?
+What is the main problem with renewable energy sources?
+Do you think overpopulation is an important environmental issue? Why or why not?
+How can we protect the environment and at the same time improve people’s standard of living?
+What should we do to increase awareness about environmental pollution?
+What is global warming?
+Do you think nuclear power is safe? To whom should it be allowed and why?
+In what ways can we save more water?
+# freetime
+How do people in your country spend their free time?
+How does finance affect the way people spend their free time?
+Is it important to have a hobby?
+Is it harmful to spend too much time on a hobby?
+Where do young people in this country usually spend their free time?
+How do the men in your family usually spend their free time?
+How do the women in your country usually spend their free time?
+Do men and women spend their free time differently? How?
+Which hobbies are the most popular with women in your country? And with men?
+Do people’s leisure time activities change as they get older? How?
+# culture
+Do you think it’s important to know about other cultures?
+How can we benefit from learning about other cultures?
+What do you think is the best way to learn about another culture?
+Do you think that learning foreign languages can help us understand foreign cultures?
+What does it mean to be polite in your culture?
+What is considered rude in your culture?
+# countryside
+What are the advantages of living in the countryside?
+What are the disadvantages of living in the countryside?
+What kinds of people live in the countryside?
+What do people living in the countryside like to do?
+How has life changed over time in the countryside?
+Do you think it is better to live in the city or in the countryside?
+Do you think landmarks make a city more famous, why?
+What interesting things can we do in big cities?
+What’s the difference between living in the city and in the countryside?
+# weather
+Do you think the weather has an influence on people’s mood?
+How do you feel about the climate in recent years?
+What can we do to stop the greenhouse effect?
+What are the possible results if the temperature continues going up?
+What do people usually do in winter?
+What are the new jobs that come up in extreme weather?
+How do people find it to work in extremely cold or hot weather?
+How do extremely cold or hot weather help people?
+Do children enjoy extremely cold weather?
+# shopping
+Why do some people choose to do their shopping in a street market rather than the shopping mall?
+Do you think that discounted goods have good value?
+How often do people in your country go shopping?
+What kinds of places are popular for shopping in your country?
+Do you think online shopping will replace shopping in reality?
+Have you ever had a bad shopping experience?
+What would you do if you bought something disappointing from the internet?
+How has online shopping become popular these days?
+Is it necessary for companies to set up customer service?
+What products or services do people in your country like to complain about?
+Would you buy anything from a shop about which you have complained earlier?
+Do you think customers’ complaints will improve products or services?
+Are there any disadvantages to setting up customer service?
+# time
+What is the main reason people don’t have enough time?
+How can people balance their time between work and private life?
+Is it important for people to relax during the day?
+Can people control their time more wisely when they get older?
+Do modern technologies make people use time up or reduce the time?
+Do you think people can still do their tasks if they don’t plan them?
+Do you think it is possible to learn how to manage your time?
+What are some possible advantages of using a time management app for your phone to help you plan your time?
+Why do you think some people don’t plan their day in advance?
+What are some of the excuses that people make when they are late?
+Do you think it’s important to be on time? Is punctuality important?
+For what situations is being on time important?
+For what situations is being on time not very important?
+Do you think modern technology gives us more time, or less?
+Are people in your country usually punctual when they have to be somewhere at a certain time?
+What do people in your country think of people who are late?
+Which do you prefer? Having a plan or having no plan?
+In general, do you think planning is important?
+Why do people make plans?
+# speaking
+Why do people get nervous when they have to give a speech?
+How can people improve their public speaking skills?
+Can you suggest any methods that would help reduce nervousness?
+Why do most people feel nervous when it comes to public speaking?
+Is it good for people to visit schools and give a talk to children?
+What kinds of people should be invited to give a speech?
+Is listening to speeches important for children?
+What is required to be a good public speaker?
+In what occasion would you be a good listener?
+# sports
+What kinds of sports are popular in your country?
+What else can people do to keep fit besides sports?
+Do you think young people should play dangerous sports?
+What do parents do to make their children like sports?
+Why are competition programs so popular?
+Who do you think will take part in the competition?
+Do people need competitive spirits at work?
+What are the benefits of playing a sport?
+Do you think the types of sport that are popular will change in the future?
+Is there any violence at sporting events in your country?
+Why are some sports fans so passionate?
+Should athletes be better role models?
+Is it important for a country to win lots of medals?
+How can sports bring people from different countries closer together?
+# creativity
+What creative activities did you like to do when you were young?
+Why do people like to copy others’ ideas these days?
+What’s the best way to cultivate children’s creativity?
+Do you think creativity can be learned?
+Why does art help to nurture creativity?
+Which invention has transformed your country most?
+Do you think intellectual property laws are too strict?
+How long should someone be able to profit from an idea?
+Should all medicines be free to manufacture?
+# marriage
+If you are 35 years old and unmarried, would you still wait for your true love? Why?
+Who will pay for the wedding costs? Man, woman or both? Why?
+What do you think is the best age to get married?
+Do you think weddings in your country waste a lot of money?
+At what age do most people in your country get married?
+Does getting married mean giving up your freedom?
+Is it okay for a couple to live together before getting married? Why or why not?
+Is it better to be single or to be married?
+Is it OK to marry someone from a different religion?
+Is it OK for a man to have two wives?
+Do people change after getting married?
+What makes a happy marriage?
+What is the most important ingredient in a happy marriage?
+What are some advantages of an international marriage?
+Is it good for children to have parents from two different countries? Why?
+Do you think that gays should be allowed to marry?
+# handwriting
+Is handwriting still important?
+Is it possible to improve a student’s handwriting after years?
+Is being left-handed the cause of the problem?
+Are handwriting problems more common in boys?
+What is the future of handwriting?
+Do you think that handwriting expresses personality?
+# toys
+Do you think it’s better for a child to play with their toys alone or with other kids?
+Why do parents buy lots of toys for their children?
+What are the differences between today’s toys and olden toys?
+What factors should you keep in mind while purchasing a toy?
+Would you allow children to buy toys of their choice?
+# animals
+Do you think animals have feelings and rights? Why? Why not?
+Some people breed animals such as dogs for money. How do you feel about that?
+Do you think there should be laws to protect the welfare of pets and farm animals? Why? Why not?
+Are there any wild animals in your country that are not found in any other country?
+Are there any animal reserves in your country where wild animals can live with protection?
+How do people feel about the protection of wild animals?
+Have you seen any TV programs about animals?
+What should we do to protect endangered animals?
+Why do some people refuse to eat animals?
+What would happen when some species disappear from the earth?
+Do you think it is right to keep wild animals in captivity all their life?
+How do you feel about the use of animals for medical research?
+Is it morally right to spend a lot of money on pets, rather than helping people in need?
+What can children learn by having a pet?
+What can people learn from animals?
+Why do some people not like pets?
+What are the pros and cons of keeping a pet?
+Are there laws regarding hunting in your country?
+# politeness
+Are people more polite with non-family members than they are with their parents?
+Are people today as polite as people were in the past?
+Why is it important to show respect to others?
+How do people show politeness in your country?
+How do you deal with impolite people?
+What kinds of behavior are considered impolite?
+# books
+What kinds of books do old people like to read?
+Are you a good storyteller?
+How do you think people will read in the future?
+Do you think that the internet and television will eventually make books obsolete?
+Do you think that it is more valuable to read a book than to watch television?
+What kind of books are considered good reads in your opinion?
+Do you regard famous writers as good role models?
+Do you think that people read nowadays as they did in the past?
+How does our reading habit change as we grow up? Why does it happen?
+If a movie is based on a book, would you prefer to read the book or to watch the film? Why?
+# language
+What kind of quality should a language teacher have?
+Why do people want to learn a foreign language?
+Which language is likely to become dominant in the future?
+Do you think that endangering languages should be protected or should we just let them fade away?
+What are the advantages and disadvantages of being monolingual?
+Should foreign language study be required?
+Why is English used in so many places?
+Do you think language affects thought?
+Do you think that a language other than English should be used as an “international language”?
+# technology
+What is the most common type of technology used by people in your country?
+Are there any other sectors that need technology?
+Is it possible to live without technology?
+What are the advantages and disadvantages of technology?
+What is the impact of technology on people’s lives?
+How do you think modern technology will change the way people work in the future?
+How can technology make our life easier?
+What are some of the greatest technological achievements?
+What is the difference between science and technology?
+Do you think robots will cause unemployment in the future or make more work? Why?
+How do you think face to face communication differs from communication using computers?
+What are the good and bad aspects of using a computer?
+What social changes have cell phones made?
+Do you think using cell phones too much is bad for our physical or mental health? Why?
+To stop global warming, should the amount of car driving be limited or changed? What do you think?
+Do you think modern technology reduces or increases stress? Why?
+Do you think money should be spent to explore space or is it better spent helping people on earth? Why?
+What is your opinion about children playing violent video games or computer programs?
+What do you think should be done to people who spread viruses, start hoaxes or create spam on the Internet?
+How have technological advances affected our life?
+# transport
+What measures should the government take to solve transportation problems?
+What types of public transport can be found in your country?
+What types of public transport do you use most?
+Are there any public transport problems in your country?
+How to encourage more people to take public transportation?
+What are the causes and contributing factors to traffic congestion?
+At what age does the average person obtain a driver’s license?
+How do you think countries can reduce congestion on the roads?
+Is there any environment-friendly transportation in your area?
+Are there speed limits in your country?
+What is the penalty for speeding in your country?
+How important do you think it is to use public transportation?
+Do you think city governments should discourage the use of privately driven cars within city limits?
+How could public transportation in your city be improved?
+Do you think that we ought to be obligated to drive electrical and solar-powered vehicles?
+Is public transportation in your city efficient?
+Is public transportation in your city too expensive?
+Do you think that governments should encourage public transportation more?
+# family
+What are the parents’ responsibilities towards their children?
+What’s the influence of parents on their children?
+What would children do to make their parents proud?
+What do you think are some of the most difficult problems faced by parents?
+Should parents reward their children for the good things that they do?
+Should a good mother give up her job to stay at home with her children?
+Do you think there should be a maximum age for parents to have a new child?
+Do you think it is OK to breast-feed in public?
+Do you think gay couples can be good parents to adopted children?
+What do you think about single mothers?
+# development
+What can people learn from mistakes?
+Can mistake help people to be more successful?
+How to avoid making mistakes?
+What’s the best way to gain experience in life?
+Do you agree that we learn best from our mistakes?
+Can we gain life experience in books and movies?
+Which is more important, experience or potential?
+What’s the most important factor in decision-making?
+Do you think adults always make better decisions than children?
+Do you like to make quick decisions?
+What can people learn from wrong decisions?
+Should parents make decisions for their children?
+# business
+Why do some people decide to set up their own business?
+What challenges and difficulties do people face when they try to open a small business?
+What are some of the advantages and disadvantages of small businesses compared to large companies?
+How can small businesses benefit the people in their community?
+Compare small shops with big international department stores and supermarkets.
+What qualities does a small business owner need to have?
+Compare owning and running a small business to being an employee in a large company.
+# outdoor
+Would you say people spend more time outdoors today than they did, say, 20 years ago?
+Are there any outdoor activities that many people used to do but which most people don’t do now?
+What are the most popular outdoor activities in your country?
+Do old and young people like doing the same kinds of activities outdoors?
+What do you think are some of the differences between working outdoors, compared to say, working in an office?
+Why do some people prefer to work outdoors?
+How do you think climate and the environment affect what activities people do outdoors?
+# oldpeople
+What can children learn from old people?
+What qualities does a person need to take care of old people?
+Do you think old people’s lives are better now compared to the past?
+Do you think elderly people should be allowed to work?
+Do you think that elderly people should be taken care of at home?
+Why do old people today live longer than in the past?
+# leadership
+Can leadership skills be taught?
+Are some people born to be leaders?
+What should a leader do to remain popular?
+Why are elected politicians often so unpopular?
+# skills
+How can people learn practical skills?
+Do you think children should learn some practical skills at school?
+Do you think it’s useful for adults to attend classes to further their education?
+Who do you think should pay for adult education: the government, the student or the company, if it is a work-related course?
+What practical skills do children learn at school in your country?
+How useful will these skills be to the children after they leave school?
+`;
+/* Part 3 starter questions (my own), merged with the pasted topics above */
+const P3={
+ success:["What qualities make a person successful?","Is success mostly talent or hard work?","How do you think people's idea of success has changed?","Do you think money is the best measure of success?","Can failure be useful?","Do ambitious people make better leaders?"],
+ business:["Why do many people want to start their own business?","What skills do entrepreneurs need?","Are small businesses important for a country?","Is it better to work for a company or run your own?","How has the internet changed business?","What are the risks of starting a company?"],
+ education:["Is online learning as effective as classroom learning?","Should education focus on jobs or general knowledge?","How might schools change in the future?"],
+ work:["What makes a job satisfying?","Is salary the most important factor in choosing a career?","How has working life changed in recent decades?","Should people change careers during their lives?","Is working from home a good idea?"],
+ money:["Is advertising an important influence on what we buy?","Should children learn to manage money at school?","Is online shopping better than shopping in stores?","Does having more money make people happier?"],
+ technology:["How has technology changed the way people communicate?","Do you think technology makes people lonely?","Will robots replace many jobs?","Should children have limited screen time?"],
+ travel:["Why do people like to travel abroad?","Does tourism benefit local communities?","Is it better to travel alone or in a group?","What problems can mass tourism cause?"],
+ development:["Why do people find it hard to change habits?","Do you think people can change their personality?","What helps people stay motivated?","Is it better to set big or small goals?","How can people learn from mistakes?"],
+ people:["Why do people look up to famous people?","Are role models more important for children or adults?","Do public figures have a responsibility to set an example?","Who influences young people most today?","Can ordinary people be as inspiring as celebrities?"]
+};
+/* ====== PARSE BANKS ====== */
+const REL={success:["leadership","development"],business:["shopping","leadership"],education:["skills","language","books","creativity","handwriting"],work:["leadership","time","skills","speaking"],money:["shopping"],technology:["creativity","time"],travel:["transport","outdoor","weather"],development:["time","skills"],people:["leadership","oldpeople","books"],family:["parents","oldpeople","toys","marriage"],environment:["weather","countryside","animals","outdoor"],freetime:["sports","outdoor","time"],health:["sports","oldpeople"],music:["creativity"],fashion:["shopping"],news:["speaking","language"],countryside:["weather","outdoor","transport"],animals:["environment"],politeness:["culture","speaking"]};
+P2.forEach(c=>{if(!c.t)c.t=/house or apartment|crowded|local area/.test(c.c)?"countryside":/animal/.test(c.c)?"animals":/apologized/.test(c.c)?"politeness":"success"});
+const PART1={};
+(()=>{let g,t;P1TXT.split("\n").forEach(l=>{l=l.trim();if(!l)return;
+ if(l.startsWith("## ")){g=l.slice(3);PART1[g]={}}else if(l.startsWith("# ")){t=l.slice(2);PART1[g][t]=[]}else PART1[g][t].push(l)});
+ let k;P3TXT.split("\n").forEach(l=>{l=l.trim();if(!l)return;
+ if(l.startsWith("# ")){k=l.slice(2);P3[k]=P3[k]||[]}else P3[k].push(l)})})();
+/* ====== ENGINE ====== */
+const $=id=>document.getElementById(id);
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const show=id=>["home","test","done"].forEach(s=>$(s).classList.toggle("hide",s!==id));
+let S; // state
+function build(){
+ const topics=[];Object.values(PART1).forEach(g=>Object.entries(g).forEach(([k,v])=>topics.push(v)));
+ const pick=shuffle(topics).slice(0,3);
+ const p1q=pick.flatMap((q,i)=>shuffle(q).slice(0,i<2?4:3)).slice(0,10);
+ const cd=shuffle(P2)[0];
+ let p3=shuffle(cd.q||[]).slice(0,5);
+ if(p3.length<5){const pool=shuffle((P3[cd.t]||[]).concat((REL[cd.t]||[]).flatMap(k=>P3[k]||[])).filter(x=>!p3.includes(x)));p3=p3.concat(pool.slice(0,5-p3.length))}
+ const card=cd;
+ const steps=[];
+ p1q.forEach(q=>steps.push({part:1,text:q,dur:25,mode:"speak"}));
+ steps.push({part:2,card,dur:60,mode:"prep"});
+ steps.push({part:2,card,dur:120,mode:"speak"});
+ p3.forEach(q=>steps.push({part:3,text:q,dur:35,mode:"speak"}));
+ return steps;
+}
+let tick=null;
+function startTest(){S={steps:build(),i:0,left:0,running:false,end:0,spoken:0,visited:new Set()};load(0);show("test")}
+function load(i){
+ stop();S.i=i;const st=S.steps[i];S.left=st.dur;S.visited.add(i);render();
+}
+function stop(){clearInterval(tick);S.running=false;$("toggle").textContent=S&&S.left<S.steps[S.i].dur?"Resume":"Start"}
+function run(){
+ if(S.running)return;S.running=true;S.end=Date.now()+S.left*1000;$("toggle").textContent="Pause";
+ let last=S.left;
+ tick=setInterval(()=>{
+  S.left=Math.max(0,Math.ceil((S.end-Date.now())/1000));
+  if(S.left<last){if(S.steps[S.i].mode==="speak")S.spoken+=last-S.left;last=S.left}
+  paint();if(S.left<=0){clearInterval(tick);S.running=false;toast("Time is up");setTimeout(()=>go(1,true),900)}
+ },200);
+}
+function go(d,auto){
+ const n=S.i+d;if(n<0)return;
+ if(n>=S.steps.length){finish();return}
+ const wasP2=S.steps[S.i].mode==="prep"&&auto;
+ load(n);
+ if(auto||S.steps[n].mode==="speak"&&auto)run(); // auto-advance keeps the exam flowing
+}
+function fmt(s){return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+function paint(){
+ const st=S.steps[S.i];$("time").textContent=fmt(S.left);
+ const b=$("tbox");b.className=(st.mode==="prep"?"prep":"speak")+(S.left<=5&&S.left>0?" low":"");
+ $("pg").style.width=((S.i+(1-S.left/st.dur))/S.steps.length*100)+"%";
+}
+function render(){
+ const st=S.steps[S.i],names=["","Part 1: Interview","Part 2: Long turn","Part 3: Discussion"];
+ $("part").textContent=names[st.part];
+ const inPart=S.steps.filter(s=>s.part===st.part&&!(st.part===2&&s.mode==="speak"&&false));
+ if(st.part===2){$("qn").textContent=st.mode==="prep"?"Preparation":"Speaking"}
+ else{const first=S.steps.findIndex(s=>s.part===st.part);$("qn").textContent="Question "+(S.i-first+1)+" of "+inPart.length}
+ const qc=$("qcard");
+ if(st.card)qc.innerHTML='<div class="cue"><p class="q">'+st.card.c+'</p><p style="margin:.8em 0 0">You should say:</p><ul>'+st.card.b.map(x=>"<li>"+x+"</li>").join("")+"</ul></div>";
+ else qc.innerHTML='<p class="q">'+st.text+"</p>";
+ $("tl").textContent=st.mode==="prep"?"Preparation time. Make notes in your head or on paper.":"Speaking time";
+ $("ready").classList.toggle("hide",st.mode!=="prep");
+ $("prev").disabled=S.i===0;
+ $("toggle").textContent="Start";paint();
+}
+function finish(){
+ stop();const c=n=>S.steps.filter((s,i)=>s.part===n&&s.mode==="speak"&&S.visited.has(i)).length;
+ const t=S.spoken;
+ $("sum").innerHTML=[["Questions visited",c(1)+c(2)+c(3)],["Part 1 questions",c(1)+" of 10"],["Part 2 cue card",S.visited.has(S.steps.findIndex(s=>s.part===2&&s.mode==="speak"))?"Completed":"Skipped"],["Part 3 questions",c(3)+" of 5"],["Total speaking time",Math.floor(t/60)+" min "+t%60+" s (timer running during speaking)"]].map(r=>"<div><span>"+r[0]+"</span><b>"+r[1]+"</b></div>").join("");
+ $("pg").style.width="100%";show("done");
+}
+function toast(m){const t=$("toast");t.textContent=m;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),1500);try{const a=new (window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator();o.connect(a.destination);o.frequency.value=660;o.start();o.stop(a.currentTime+.15)}catch(e){}}
+$("startBtn").onclick=startTest;
+$("toggle").onclick=()=>S.running?stop():run();
+$("next").onclick=()=>go(1,false);
+$("prev").onclick=()=>go(-1,false);
+$("ready").onclick=()=>{go(1,false);run()};
+$("restart").onclick=()=>{if(confirm("Restart with a new test?"))startTest()};
+$("again").onclick=startTest;
+$("homeBtn").onclick=()=>{$("pg").style.width="0";show("home")};
+</script></body></html>
